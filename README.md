@@ -56,6 +56,21 @@ We have implemented a few objects as a basis and will expand this to include oth
 
 **CSG:** 3D solids made using boolean operations of other solids. For example the union of two spheres. Each CSG has an operand and two children, these children are themselves 3D objects which can be primitives or other CSG's (1 parameter + childrens' parameter count) _note:_ CSG will turn all faces into triangular meshes, and requires pymesh and boolean engines to be installed.
 
+### Roof Types ###
+Each roof type centers the bottom of the roof at the origin.  The optional building height parameter controls how far down to extrude the bottom of the roof, if at all.  The building height paramater is included in the parameter counts below
+
+**Flat roof:** defined by a roof length, and roof width (3 parameters)
+
+**Shed roof:** defined by a roof height, roof length, and roof width (4 paramters)
+
+**Gable roof:** defined by a roof height, roof length, and roof width (4 paramters)
+
+**Gambrel roof:** defined by two roof height parameters, roof length, and two roof width parameters.  The roof height parameters control the height at each "step" of the roof, whereas the roof width parameters control the width at each "step".  The final height of the roof is the sum of the two roof height parameters (6 paramters)
+
+**Hipped roof:** defined by a roof height, two roof length parameters, and roof width.  The second roof length parameter sets the length at the roof peak (5 paramters)
+
+**Mansard roof:** defined by two roof height parameters, three roof length parameters, and two roof width parameters. The roof height, length, and width parameters control the height, length, and width respectively at each "step" of the roof, where the last length parameter sets the length at the roof peak.  The final height of the roof is the sum of the two roof height parameters (8 parameters)
+
 ## Scene meshing ##
 We have provided a sample program and sample data to reconstruct the geometry encoded in this format. This program reads in the sample JSON file and creates a directory with series of .obj files for loading into a variety of 3D viewers/rendering programs. To execute the sample program python 3 along with numpy and pymesh are needed. Once all the dependencies are installed simply execute
 

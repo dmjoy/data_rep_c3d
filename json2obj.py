@@ -1,5 +1,6 @@
 import numpy as np
 import primitiveMeshGen
+import roofGen
 import json
 import os
 import argparse
@@ -74,6 +75,18 @@ def parseObject(obj,temppath=None):
     fv = parsePlanarRegion(obj)
   elif objtype == 'csg':
     fv = parseCSG(obj,temppath=temppath)
+  elif objtype == 'flat':
+    fv = parseFlat(obj)
+  elif objtype == 'shed':
+    fv = parseShed(obj)
+  elif objtype == 'gable':
+    fv = parseGable(obj)
+  elif objtype == 'gambrel':
+    fv = parseGambrel(obj)
+  elif objtype == 'hipped':
+    fv = parseHipped(obj)
+  elif objtype == 'mansard':
+    fv = parseMansard(obj)
   # ensure numpy array
   fv['vertices'] = np.array(fv['vertices'])
 
@@ -112,6 +125,60 @@ def parseTransform(trans):
   else:
     raise ValueError(transtype + ' is not a valid transformation')
   return affMat
+
+# parse flat
+def parseFlat(data):
+  v, f = roofGen.flatGen(data['roof_length'],
+                         data['roof_width'],
+                         data['building_height'])
+  return {'vertices': v, 'faces': f}
+
+# parse shed
+def parseShed(data):
+  v, f = roofGen.shedGen(data['roof_height'],
+                         data['roof_length'],
+                         data['roof_width'],
+                         data.get('building_height', 0))
+  return {'vertices': v, 'faces': f}
+
+# parse gable
+def parseGable(data):
+  v, f = roofGen.gableGen(data['roof_height'],
+                          data['roof_length'],
+                          data['roof_width'],
+                          data.get('building_height', 0))
+  return {'vertices': v, 'faces': f}
+
+# parse gambrel
+def parseGambrel(data):
+  v, f = roofGen.gambrelGen(data['roof_height_1'],
+                            data['roof_height_2'],
+                            data['roof_length'],
+                            data['roof_width_1'],
+                            data['roof_width_2'],
+                            data.get('building_height', 0))
+  return {'vertices': v, 'faces': f}
+
+# parse hipped
+def parseHipped(data):
+  v, f = roofGen.hippedGen(data['roof_height'],
+                           data['roof_length_1'],
+                           data['roof_length_2'],
+                           data['roof_width'],
+                           data.get('building_height', 0))
+  return {'vertices': v, 'faces': f}
+
+# parse mansard
+def parseMansard(data):
+  v, f = roofGen.mansardGen(data['roof_height_1'],
+                            data['roof_height_2'],
+                            data['roof_length_1'],
+                            data['roof_length_2'],
+                            data['roof_length_3'],
+                            data['roof_width_1'],
+                            data['roof_width_2'],
+                            data.get('building_height', 0))
+  return {'vertices': v, 'faces': f}
 
 # parse sphere
 def parseSphere(data):
